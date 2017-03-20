@@ -24,7 +24,7 @@ LinkedList::LinkedList(int value)
 {
   head = new Node;
   head->data = value;
-  tail = head;
+  tail = nullptr;
 }
 
 //copy constructor (performs a deep copy)
@@ -44,8 +44,12 @@ LinkedList::~LinkedList()
 //adds a value to the head of the list
 void LinkedList::push(int value)
 {
-
-
+  if(head != nullptr){
+    Node* temp = new Node;
+    temp->data = value;
+    temp->next = head;
+    head = temp;
+  }
 }
 
 //gets the last element from the list, without removing it
@@ -60,12 +64,17 @@ string LinkedList::toString() const
 {
   Node* current = head;
   string str;
-  if (current == nullptr){
+  if(current == nullptr){
     return "";
   }else{
-    while (current != tail) {
-      str.append(to_string(current->data) + " ");
-      current = current->next;
+    while(current != nullptr) {
+      if(current->next != nullptr){
+        str.append(to_string(current->data) + " ");
+        current = current->next;
+      }else{
+        str.append(to_string(current->data));
+        return str;
+      }
     }
     return str;
   }
