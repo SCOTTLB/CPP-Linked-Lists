@@ -62,7 +62,15 @@ void LinkedList::push(int value)
 //requires: list not empty
 int LinkedList::peekTail()
 {
-    return -1;
+    assert(head !=  nullptr);
+
+    int value;
+    Node* current = head;
+    while(current != tail){
+      current = current->next;
+    }
+    value = current->data;
+    return value;
 }
 
 //prints the list in order from head to tail
@@ -95,18 +103,11 @@ int LinkedList::pop()
 {
   // list not empty check
   assert(head != nullptr);
-  Node* current = head;
-  // Single element check
-  if(head->next != nullptr){
-    Node* temp = head->next;
-    current = nullptr;
-    head = temp;
-
-  }else{
-    // there is only one element in the list
-    head = nullptr;
-    tail = nullptr;
-  }
+  int value = head->data;
+  Node* temp = head;
+  head = head->next;
+  delete temp;
+  return value;
 
 }
 
