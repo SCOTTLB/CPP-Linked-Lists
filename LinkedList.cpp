@@ -136,34 +136,68 @@ void LinkedList::append(int value)
 //appends the deep copies of the nodes of rhs on to the end of this list
 void LinkedList::appendList(const LinkedList& rhs)
 {
+  Node* end = head;
+  // jump to the end of the list
+  while(end != tail){
 
+    end = end->next;
+  }
+  Node* current = rhs.head;
+  // check to see if appending empty list
+  if(current == nullptr){
+    end->next = nullptr;
+  }else{
+    // list contains values
+    while(current){
+      // make a new node to copy into at the end of the list
+      end->next = new Node;
+      // change the end of the lit to the new node
+      end = end->next;
+      // set the tail
+      tail = end;
+      // copy the data
+      end->data = current->data;
+      // increment the rhs list
+      current = current->next;
+    }
+  }
 }
 
 //inserts a value immediately after the first occurrence of afterValue,
 //if afterValue is not in the list then inserts at the tail
 void LinkedList::insertAfter(int value, int afterValue)
 {
-
   Node* current = head;
+  // so we know when to insert
   int insert_flag = 1;
+  // while the flag is raised
   while(insert_flag){
+
     if(current->data == afterValue){
+      // make a new node
       Node* tmp = new Node;
+      // copy in the value
       tmp->data = value;
+      // set the tail if its at the end
       if(current->next == nullptr){
         tail = tmp;
       }
+      // point to the new node
       tmp->next = current->next;
       current->next = tmp;
+      // lower the flag
       insert_flag = 0;
     }else{
+      // if the value isnt in the list
       if(current == tail){
+        // stick a new node at the end of the list
         Node* tmp = new Node;
         tmp->data = value;
         tail->next = tmp;
         tail = tmp;
         insert_flag = 0;
       }else{
+        // otherwise increment the list
         current = current->next;
       }
     }
@@ -174,13 +208,51 @@ void LinkedList::insertAfter(int value, int afterValue)
 //removes all occurrences of value from the list
 void LinkedList::removeAllOccurences(int value)
 {
+  Node* current = head;
+  // Case for if theres only one item in the list and
+  while(current && current->data == value){
+    Node* previous = current;
+    current = current->next;
+    head = current;
 
+    delete previous;
+  }
+  // If the value isnt in the head node
+  while (current) {
+    Node* previous;
+    if(current->data == value){
+      previous->next = current->next;
+      delete current;
+      current = previous->next;
+    }else{
+      // Scootch up the list
+      previous = current;
+      current = current->next;
+    }
+  }
 }
 
 //reverses the list
 void LinkedList::reverse()
 {
-
+  // track the new head
+  Node* cursor = nullptr;
+  Node* next;
+  // while theres still a head in the old list
+  while(head){
+    next = head->next;
+    head->next = cursor;
+    cursor = head;
+    head = next;
+  }
+  // make the list head the tracked one
+  head = cursor;
+  Node* current = head;
+  // set the new tail
+  while(current->next != nullptr){
+    current = current->next;
+  }
+  tail = current;
 }
 
 //checks if two lists are equal in state (contain the same values in the same order)
