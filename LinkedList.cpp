@@ -24,7 +24,7 @@ LinkedList::LinkedList(int value)
 {
   head = new Node;
   head->data = value;
-  tail = nullptr;
+  tail = head;
 }
 
 //copy constructor (performs a deep copy)
@@ -44,11 +44,17 @@ LinkedList::~LinkedList()
 //adds a value to the head of the list
 void LinkedList::push(int value)
 {
+  Node* temp = new Node;
+  // if a list exits
   if(head != nullptr){
-    Node* temp = new Node;
     temp->data = value;
     temp->next = head;
     head = temp;
+  }else{
+    // otherwise create a list
+    temp->data = value;
+    head = temp;
+    tail = temp;
   }
 }
 
@@ -64,9 +70,12 @@ string LinkedList::toString() const
 {
   Node* current = head;
   string str;
+
+  // If only one node exits within the list
   if(current == nullptr){
     return "";
   }else{
+    // loop through and print values
     while(current != nullptr) {
       if(current->next != nullptr){
         str.append(to_string(current->data) + " ");
@@ -84,13 +93,42 @@ string LinkedList::toString() const
 //requires: list not empty
 int LinkedList::pop()
 {
-    return -1;
+  // list not empty check
+  assert(head != nullptr);
+  Node* current = head;
+  // Single element check
+  if(head->next != nullptr){
+    Node* temp = head->next;
+    current = nullptr;
+    head = temp;
+
+  }else{
+    // there is only one element in the list
+    head = nullptr;
+    tail = nullptr;
+  }
+
 }
 
 //adds a value to the end of the list
 void LinkedList::append(int value)
 {
-
+  Node* current = head;
+  // if a list exists
+  if(head != nullptr){
+    while(current != tail){
+      current = current->next;
+    }
+    Node* temp = new Node;
+    temp->data = value;
+    current->next = temp;
+    tail = temp;
+  }else{
+    // no list exists
+    head = new Node;
+    head->data = value;
+    tail = head;
+  }
 
 }
 
@@ -105,6 +143,30 @@ void LinkedList::appendList(const LinkedList& rhs)
 void LinkedList::insertAfter(int value, int afterValue)
 {
 
+  Node* current = head;
+  int insert_flag = 1;
+  while(insert_flag){
+    if(current->data == afterValue){
+      Node* tmp = new Node;
+      tmp->data = value;
+      if(current->next == nullptr){
+        tail = tmp;
+      }
+      tmp->next = current->next;
+      current->next = tmp;
+      insert_flag = 0;
+    }else{
+      if(current == tail){
+        Node* tmp = new Node;
+        tmp->data = value;
+        tail->next = tmp;
+        tail = tmp;
+        insert_flag = 0;
+      }else{
+        current = current->next;
+      }
+    }
+  }
 
 }
 
