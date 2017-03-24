@@ -1,6 +1,6 @@
 /*
  * File:   LinkedList.cpp
- * Author: Simon Powers
+ * Author: Scott Bean
  *
  * Last modified 03/03/2017
  * Implements the LinkedList class.
@@ -30,6 +30,11 @@ LinkedList::LinkedList(int value)
 //copy constructor (performs a deep copy)
 LinkedList::LinkedList(const LinkedList& rhs)
 {
+  Node* cursor = rhs.head;
+  while(cursor){
+    this->append(cursor->data);
+    cursor = cursor->next;
+  }
 
 
 }
@@ -84,7 +89,7 @@ string LinkedList::toString() const
     return "";
   }else{
     // loop through and print values
-    while(current != nullptr) {
+    while(current != nullptr){
       if(current->next != nullptr){
         str.append(to_string(current->data) + " ");
         current = current->next;
@@ -258,8 +263,20 @@ void LinkedList::reverse()
 //checks if two lists are equal in state (contain the same values in the same order)
 bool LinkedList::operator ==(const LinkedList& other) const
 {
-  	return false;
+  Node* left = this->head;
+  Node* right = other.head;
 
+  while(left){
+
+    if(left->data == right->data){
+      left = left->next;
+      right = right->next;
+    }else{
+      return false;
+    }
+  }
+
+  	return true;
 }
 
 //checks if two lists are not equal in state
@@ -278,6 +295,22 @@ LinkedList& LinkedList::operator +(int value)
 //copy assignment operator (performs a deep copy)
 LinkedList& LinkedList::operator =(const LinkedList& rhs)
 {
+    Node* left = this->head;
+    Node* right = rhs.head;
+
+    int counter = 0;
+    while(left){
+      counter++;
+      left = left->next;
+    }
+    for(int i = 0; i < counter; i++){
+       this->pop();
+    }
+
+    while(right){
+      append(right->data);
+      right = right->next;
+    }
 
     return *this;
 }
