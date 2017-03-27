@@ -282,12 +282,24 @@ bool LinkedList::operator ==(const LinkedList& other) const
 //checks if two lists are not equal in state
 bool LinkedList::operator !=(const LinkedList& other) const
 {
-    return false;
+  Node* left = this->head;
+  Node* right = other.head;
+
+  while(right){
+    if(left == right){
+      right = right->next;
+    }else{
+      return true;
+    }
+  }
+  return false;
 }
 
 //pushes a new value onto the head of the list
 LinkedList& LinkedList::operator +(int value)
 {
+
+    this->push(value);
 
     return *this;
 }
@@ -295,8 +307,14 @@ LinkedList& LinkedList::operator +(int value)
 //copy assignment operator (performs a deep copy)
 LinkedList& LinkedList::operator =(const LinkedList& rhs)
 {
+
     Node* left = this->head;
     Node* right = rhs.head;
+
+    if(left == right){
+      return *this;
+    }
+
 
     int counter = 0;
     while(left){
@@ -318,6 +336,17 @@ LinkedList& LinkedList::operator =(const LinkedList& rhs)
 //pushes values from an input stream onto the front of the list
 std::istream& operator>>(std::istream &in, LinkedList &value)
 {
+     int input;
+     char c;
+
+     while(!in.eof()){
+       in.get(c);
+       if(c == '\n'){
+         break;
+       }
+       in >> input;
+       value.push(input);
+     }
 
     return in;
 }
@@ -325,6 +354,6 @@ std::istream& operator>>(std::istream &in, LinkedList &value)
 //writes the values, in order, to an output stream
 std::ostream& operator<<(std::ostream &out, const LinkedList &value)
 {
-
+    out << value.toString();
     return out;
 }
