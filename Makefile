@@ -9,7 +9,11 @@ all: LinkedList.cpp
 	rm *.o
 	./test
 
+library:
+	g++ $(CXXFLAGS) -c LinkedList.cpp -o LinkedList.o
+	ar rcs linkedlist.a LinkedList.o
 
 clean:
 	rm *.o
 	rm *.a
+	rm ./test
