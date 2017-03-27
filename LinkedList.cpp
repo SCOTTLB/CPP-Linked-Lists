@@ -2,7 +2,7 @@
  * File:   LinkedList.cpp
  * Author: Scott Bean
  *
- * Last modified 03/03/2017
+ * Last modified 27/03/2017
  * Implements the LinkedList class.
  */
 
