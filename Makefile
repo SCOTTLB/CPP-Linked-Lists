@@ -6,7 +6,6 @@ all: LinkedList.cpp
 	ar rcs linkedlist.a LinkedList.o
 
 	g++ $(CXXFLAGS) test.cpp linkedlist.a -o test
-	rm *.o
 	./test
 
 library:
