@@ -16,13 +16,15 @@ using namespace std;
 //creates an empty list
 LinkedList::LinkedList()
 {
-
+  // Do nothing
 }
 
 //creates a list with an initial value to store
 LinkedList::LinkedList(int value)
 {
+  // Make a new node
   head = new Node;
+  // store the value in the node
   head->data = value;
   tail = head;
 }
@@ -31,12 +33,11 @@ LinkedList::LinkedList(int value)
 LinkedList::LinkedList(const LinkedList& rhs)
 {
   Node* cursor = rhs.head;
+  // loop through the rhs appending the data in each node to the new list
   while(cursor){
     this->append(cursor->data);
     cursor = cursor->next;
   }
-
-
 }
 
 
@@ -44,6 +45,18 @@ LinkedList::LinkedList(const LinkedList& rhs)
 LinkedList::~LinkedList()
 {
 
+  Node* current = head;
+  int counter = 0;
+
+  // Count the number of nodes
+  while(current){
+    counter++;
+    current = current->next;
+  }
+  // Pop that number of nodes
+  for(int i = 0; i < counter; i++){
+    this->pop();
+  }
 }
 
 //adds a value to the head of the list
@@ -67,13 +80,16 @@ void LinkedList::push(int value)
 //requires: list not empty
 int LinkedList::peekTail()
 {
+    // assert list not empty
     assert(head !=  nullptr);
 
     int value;
     Node* current = head;
+    // get to the end of the list
     while(current != tail){
       current = current->next;
     }
+    // get the data
     value = current->data;
     return value;
 }
@@ -90,10 +106,13 @@ string LinkedList::toString() const
   }else{
     // loop through and print values
     while(current != nullptr){
+      // if the next node exits
       if(current->next != nullptr){
+        // append the value and a space
         str.append(to_string(current->data) + " ");
         current = current->next;
       }else{
+        // otherwise its the end of the values to be printed and no space is needed
         str.append(to_string(current->data));
         return str;
       }
@@ -108,9 +127,12 @@ int LinkedList::pop()
 {
   // list not empty check
   assert(head != nullptr);
+
   int value = head->data;
   Node* temp = head;
+  // set the node below as the head
   head = head->next;
+  // remove the old head
   delete temp;
   return value;
 
@@ -122,12 +144,15 @@ void LinkedList::append(int value)
   Node* current = head;
   // if a list exists
   if(head != nullptr){
+    // go to the end
     while(current != tail){
       current = current->next;
     }
+    // make a new node and copy the data
     Node* temp = new Node;
     temp->data = value;
     current->next = temp;
+    // set the new tail
     tail = temp;
   }else{
     // no list exists
@@ -223,7 +248,7 @@ void LinkedList::removeAllOccurences(int value)
     delete previous;
   }
   // If the value isnt in the head node
-  while (current) {
+  while (current){
     Node* previous;
     if(current->data == value){
       previous->next = current->next;
@@ -265,9 +290,9 @@ bool LinkedList::operator ==(const LinkedList& other) const
 {
   Node* left = this->head;
   Node* right = other.head;
-
+  // loop through the left list
   while(left){
-
+    // check if the data is the same
     if(left->data == right->data){
       left = left->next;
       right = right->next;
@@ -275,7 +300,6 @@ bool LinkedList::operator ==(const LinkedList& other) const
       return false;
     }
   }
-
   	return true;
 }
 
@@ -284,9 +308,10 @@ bool LinkedList::operator !=(const LinkedList& other) const
 {
   Node* left = this->head;
   Node* right = other.head;
-
+  // loop through the right list
   while(right){
     if(left == right){
+      left = left->next;
       right = right->next;
     }else{
       return true;
@@ -298,10 +323,10 @@ bool LinkedList::operator !=(const LinkedList& other) const
 //pushes a new value onto the head of the list
 LinkedList& LinkedList::operator +(int value)
 {
+  // push the new value
+  this->push(value);
 
-    this->push(value);
-
-    return *this;
+  return *this;
 }
 
 //copy assignment operator (performs a deep copy)
@@ -315,16 +340,16 @@ LinkedList& LinkedList::operator =(const LinkedList& rhs)
       return *this;
     }
 
-
     int counter = 0;
+    // count the num of nodes in the left list
     while(left){
       counter++;
       left = left->next;
     }
+    // pop that number of nodes
     for(int i = 0; i < counter; i++){
        this->pop();
     }
-
     while(right){
       append(right->data);
       right = right->next;
@@ -338,9 +363,10 @@ std::istream& operator>>(std::istream &in, LinkedList &value)
 {
      int input;
      char c;
-
+     // loop though untill the end of the file
      while(!in.eof()){
        in.get(c);
+       // if the char we get is a newline
        if(c == '\n'){
          break;
        }
